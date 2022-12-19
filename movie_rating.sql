@@ -27,8 +27,8 @@ order by name, title, stars;
 -- Q6. For all cases where the same reviewer rated the same movie twice and gave it a higher rating the second time, return the reviewer's name and the title of the movie.
 select name, title
 from ((Rating R1 join Rating R2 using(rID, mID))
-		join Movie using(mID))
-		join Reviewer using(rID)
+        join Movie using(mID))
+        join Reviewer using(rID)
 where R1.ratingDate < R2.ratingDate and R1.stars < R2.stars
 
 -- Q7. For each movie that has at least one rating, find the highest number of stars that movie received. Return the movie title and number of stars. Sort by movie title.
@@ -48,19 +48,19 @@ order by title;
 -- Q8. For each movie, return the title and the 'rating spread', that is, the difference between highest and lowest ratings given to that movie. Sort by rating spread from highest to lowest, then by movie title.
 select title, (mx - mn) as ratingSpread
 from (select mID, max(stars) as mx, min(stars) as mn
-		from Rating
-		group by mID) M, Movie
+        from Rating
+        group by mID) M, Movie
 where Movie.mID = M.mID
 order by ratingSpread desc, title;
 
 -- Q9. Find the difference between the average rating of movies released before 1980 and the average rating of movies released after 1980. (Make sure to calculate the average rating for each movie, then the average of those averages for movies before 1980 and movies after. Don't just calculate the overall average rating before and after 1980.)
 select avg(before80.avgStars) - avg(after80.avgStars)
 from
-	(select avg(stars) as avgStars
-	from Movie join Rating using (mID)
-	group by mID
-	having year < 1980) before80,
-	(select avg(stars) as avgStars
-	from Movie join Rating using (mID)
-	group by mID
-	having year >= 1980) after80
+    (select avg(stars) as avgStars
+    from Movie join Rating using (mID)
+    group by mID
+    having year < 1980) before80,
+    (select avg(stars) as avgStars
+    from Movie join Rating using (mID)
+    group by mID
+    having year >= 1980) after80

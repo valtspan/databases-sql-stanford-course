@@ -2,13 +2,13 @@
 select name
 from Highschooler
 where ID in (select ID2
-			 from Highschooler join Friend
-			 on Highschooler.ID = Friend.ID1
-			 where name = 'Gabriel')
+             from Highschooler join Friend
+             on Highschooler.ID = Friend.ID1
+             where name = 'Gabriel')
 
 select H2.name
 from (Friend F1 join Highschooler H1 on F1.ID1 = H1.ID) F2
-	  join Highschooler H2 on F2.ID2 = H2.ID
+      join Highschooler H2 on F2.ID2 = H2.ID
 where H1.name = 'Gabriel'
 
 -- Q2. For every student who likes someone 2 or more grades younger than
@@ -16,7 +16,7 @@ where H1.name = 'Gabriel'
 -- the student they like.
 select H1.name, H1.grade, H2.name, H2.grade
 from (Likes L1 join Highschooler H1 on L1.ID1 = H1.ID) L2 
-	  join Highschooler H2 on L2.ID2 = H2.ID
+      join Highschooler H2 on L2.ID2 = H2.ID
 where H1.grade - H2.grade >= 2
 
 -- Q3. For every pair of students who both like each other, return the name and
@@ -24,17 +24,17 @@ where H1.grade - H2.grade >= 2
 -- alphabetical order.
 select H1.name, H1.grade, H2.name, H2.grade
 from (Likes L1 join Highschooler H1 on L1.ID1 = H1.ID) Lk
-	  join Highschooler H2 on Lk.ID2 = H2.ID
+      join Highschooler H2 on Lk.ID2 = H2.ID
 where exists (select * from Likes L2 where L1.ID1 = L2.ID2 and L1.ID2 = L2.ID1)
     and H1.name < H2.name
     
 select H1.name, H1.grade, H2.name, H2.grade
 from Likes L1, Likes L2, Highschooler H1, Highschooler H2
 where L1.ID1 = L2.ID2 and 
-	  L1.ID2 = L2.ID1 and 
-	  L1.ID1 = H1.ID and 
-	  L1.ID2 = H2.ID and
-	  H1.name < H2.name
+      L1.ID2 = L2.ID1 and 
+      L1.ID1 = H1.ID and 
+      L1.ID2 = H2.ID and
+      H1.name < H2.name
 
 -- Q4. Find all students who do not appear in the Likes table (as a student who
 -- likes or is liked) and return their names and grades. Sort by grade,
@@ -70,9 +70,9 @@ order by H1.grade, H1.name
 select name, grade
 from Highschooler H1
 where ID not in (select ID1 from Friend F1, Highschooler H2
-				 where F1.ID1 = H1.ID and
-				 	   F1.ID2 = H2.ID and
-				       H1.grade <> H2.grade)
+                 where F1.ID1 = H1.ID and
+                       F1.ID2 = H2.ID and
+                       H1.grade <> H2.grade)
 order by H1.grade, H1.name
 
 -- Q7. For each student A who likes a student B where the two are not friends,
@@ -103,7 +103,7 @@ from Highschooler
 select distinct name, grade
 from Highschooler, Likes L1 
 where L1.ID2 = Highschooler.ID and 
-	1 < (select count(*) from Likes L2 where L2.ID2 = L1.ID2)
+    1 < (select count(*) from Likes L2 where L2.ID2 = L1.ID2)
 
 select name, grade
 from Highschooler, Likes

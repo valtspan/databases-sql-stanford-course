@@ -19,13 +19,13 @@ from Movie
 select title
 from Movie
 where mID not in
-	(select mID from Reviewer join Rating using (rID)
-	 where name = 'Chris Jackson')
+    (select mID from Reviewer join Rating using (rID)
+     where name = 'Chris Jackson')
 
 -- Q5. For all pairs of reviewers such that both reviewers gave a rating to the same movie, return the names of both reviewers. Eliminate duplicates, don't pair reviewers with themselves, and include each pair only once. For each pair, return the names in the pair in alphabetical order. 
 select distinct W1.name, W2.name
 from (Rating R1 join Reviewer W1 using(rID)) RW1 join 
-	 (Rating R2 join Reviewer W2 using(rID)) RW2 using(mID)
+     (Rating R2 join Reviewer W2 using(rID)) RW2 using(mID)
 where RW1.name < RW2.name
 order by W1.name, W2.name
 
@@ -70,20 +70,20 @@ order by director, title
 -- Q10. Find the movie(s) with the highest average rating. Return the movie title(s) and average rating. (Hint: This query is more difficult to write in SQLite than other systems; you might think of it as finding the highest average rating and then choosing the movie(s) with that average rating.)
 select title, avgStars
 from (select mID, avg(stars) as avgStars from Rating group by mID)
-	  join Movie using(mID)
+      join Movie using(mID)
 where avgStars = (select max(avgStars)
- 			      from (select mID, avg(stars) as avgStars
-				   		from Rating
-				        group by mID))
+                  from (select mID, avg(stars) as avgStars
+                        from Rating
+                        group by mID))
 
 -- Q11. Find the movie(s) with the lowest average rating. Return the movie title(s) and average rating. (Hint: This query may be more difficult to write in SQLite than other systems; you might think of it as finding the lowest average rating and then choosing the movie(s) with that average rating.)
 select title, avgStars
 from (select mID, avg(stars) as avgStars from Rating group by mID) Gman
-	  join Movie using(mID)
+      join Movie using(mID)
 where avgStars = (select min(avgStars)
- 			 from (select mID, avg(stars) as avgStars
-				   from Rating
-				   group by mID))
+             from (select mID, avg(stars) as avgStars
+                   from Rating
+                   group by mID))
 
 -- Q12. For each director, return the director's name together with the title(s) of the movie(s) they directed that received the highest rating among all of their movies, and the value of that rating. Ignore movies whose director is NULL.
 select director, title, max(stars)
